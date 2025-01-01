@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+  
+<h2>Add New Item</h2>
+
+  <form method="POST">
+    {% csrf_token %}
+    
+    <!-- Checklist Item -->
+    <div class="form-group">
+      <label for="title">Item Title:</label>
+      <input type="text" id="title" name="title" class="form-control" value="{{ form.title.value }}" required>
+    </div>
+
+    <!-- Phone Number -->
+    <div class="form-group">
+      <label for="phone_number">Phone Number:</label>
+      <input type="text" id="phone_number" name="phone_number" class="form-control" value="{{ form.phone_number.value }}" required>
+    </div>
+
+    <!-- Category (Choices: Start or Transfer) -->
+    <div class="form-group">
+      <label for="category">Category:</label>
+      <select id="category" name="category" class="form-control" required>
+        <option value="start" {% if form.category.value == 'start' %}selected{% endif %}>Start</option>
+        <option value="transfer" {% if form.category.value == 'transfer' %}selected{% endif %}>Transfer</option>
+      </select>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary">Add Item</button>
+  </form>
+  <br><br><br>
+<h1>Checklist</h1>
+<ul>
+  {% for item in items %}
+    <li>
+      {{ item.title }} - {{ item.get_category_display }}
+      <form method="POST" style="display: inline;">
+        {% csrf_token %}
+        <input type="hidden" name="item_id" value="{{ item.id }}">
+        <button type="submit" name="action" value="mark_complete">Mark as Complete</button>
+        <button type="submit" name="action" value="delete">Delete</button>
+      </form>
+    </li>
+  {% empty %}
+    <p>No items to show.</p>
+  {% endfor %}
+</ul>
+<br><br><br>
+
+<form method="post" action="{% url 'logout' %}">
+  {% csrf_token %}
+  <button type="submit">Logout</button>
+</form>
+
+
+{% endblock %}
