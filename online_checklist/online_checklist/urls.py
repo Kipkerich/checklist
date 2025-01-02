@@ -24,6 +24,7 @@ urlpatterns = [
     path('', views.index, name='homepage'),
     path('register/', views.register, name='register'),
     path('checklist/', include('checklist.urls')),
+   
      
 ]
 

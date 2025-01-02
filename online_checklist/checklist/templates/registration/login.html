@@ -1,11 +1,35 @@
 {% extends 'base.html' %}
-
+{% load%}
 {% block content %}
-    <h1>Login</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Login</button>
-    </form>
+{% load widget_tweaks %}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h1 class="text-center mb-4">Login</h1>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            {{ form.username.label_tag }}
+                            {{ form.username|add_class:"form-control" }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form.password.label_tag }}
+                            {{ form.password|add_class:"form-control" }}
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                    </form>
+                </div>
+            <!-- </div>
+            <p class="text-center mt-3">
+                Don't have an account? <a href="{% url 'register' %}">Sign up</a>
+            </p>
+        </div> -->
+    </div>
+</div>
+
 
 {% endblock %}
+

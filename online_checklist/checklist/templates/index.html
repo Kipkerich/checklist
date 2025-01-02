@@ -1,31 +1,60 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Landing Page{% endblock %}
+{% block title %}Listify{% endblock %}
 
 {% block content %}
-<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-  <div class="carousel-indicators">
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-  </div>
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img src="../static/img/image1.png" class="d-block w-100" alt="...">
-      
+  <!-- Hero Section -->
+  <header class="bg-light py-5 text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Welcome to Listify</h1>
+        <p class="lead">Your ultimate checklist app to organize tasks, stay productive, and achieve your goals.</p>
+        <a href="{% url 'login'%}" class="btn btn-primary btn-lg">Get Started</a>
     </div>
-    <div class="carousel-item">
-      <img src="../static/img/image2.png" class="d-block w-100" alt="...">
+</header>
+
+<!-- Features Section -->
+<section id="features" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Features</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Organized Categories</h5>
+                        <p class="card-text">Sort tasks into meaningful categories like "Start" and "Transfer."</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Progress Tracking</h5>
+                        <p class="card-text">Easily mark tasks as complete and view them in a dedicated section.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Mobile-Friendly</h5>
+                        <p class="card-text">Access your checklist from any device, anywhere.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    
-  </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
-</div>
+</section>
+
+<!-- Benefits Section -->
+<section id="benefits" class="bg-light py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Benefits</h2>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">Streamline your task management process.</li>
+            <li class="list-group-item">Track your progress and celebrate achievements.</li>
+            <li class="list-group-item">Stay productive and organized effortlessly.</li>
+        </ul>
+    </div>
+</section>
+
 {% endblock %}
