@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'checklist',
     'widget_tweaks',
+    
+
+    
 ]
 
 MIDDLEWARE = [

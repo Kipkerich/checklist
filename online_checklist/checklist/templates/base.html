@@ -42,7 +42,11 @@
                   <a class="nav-link {% if request.resolver_match.url_name == 'view_checklist' %}active{% endif %}" href="{% url 'view_checklist' %}">View List</a>
                 </li>
                 <li class="nav-item">
+                
                   <a class="nav-link {% if request.resolver_match.url_name == 'add_item' %}active{% endif %}" href="{% url 'add_item' %}">Add items</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link {% if request.resolver_match.url_name == 'verify_checklist' %}active{% endif %}" href="{% url 'verify_checklist' %}">Verify List</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link {% if request.resolver_match.url_name == 'register' %}active{% endif %}" href="{% url 'register' %}">Register</a>
@@ -58,6 +62,7 @@
                 <li class="nav-item">
                   <a class="nav-link {% if request.resolver_match.url_name == 'login' %}active{% endif %}" href="{% url 'login' %}">Login</a>
                 </li>
+                
                 
               {% endif %}
             </ul>

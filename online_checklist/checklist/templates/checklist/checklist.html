@@ -1,69 +1,105 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
-
 <div class="container mt-5">
-  <!-- Add New Item Form -->
-  <h2 class="mb-4">Add New Item</h2>
-  <form method="POST" class="border p-4 rounded shadow-sm bg-light">
-    {% csrf_token %}
+    <!-- Success or Error Messages -->
+    {% if messages %}
+        <div class="alert alert-success">
+            {% for message in messages %}
+                {{ message }}
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% if form.errors %}
+        <div class="alert alert-danger">
+            <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <li>{{ field.label }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 
-    <!-- Checklist Item -->
-    <div class="mb-3">
-      <label for="title" class="form-label">Item Title:</label>
-      <input type="text" id="title" name="title" class="form-control" value="{{ form.title.value }}" required>
-    </div>
+    <!-- Add New Item Form -->
+    <h2 class="mb-4">Add New Item</h2>
+    <form method="POST" class="border p-4 rounded shadow-sm bg-light">
+        {% csrf_token %}
 
-    <!-- Phone Number -->
-    <div class="mb-3">
-      <label for="phone_number" class="form-label">Phone Number:</label>
-      <input type="text" id="phone_number" name="phone_number" class="form-control" value="{{ form.phone_number.value }}" required>
-    </div>
+        <!-- Checklist Item -->
+        <div class="mb-3">
+            <label for="title" class="form-label">Name:</label>
+            <input type="text" id="title" name="title" class="form-control" 
+                   value="{{ form.title.value }}" aria-label="Checklist Item Name" required>
+        </div>
 
-    <!-- Category -->
-    <div class="mb-3">
-      <label for="category" class="form-label">Category:</label>
-      <select id="category" name="category" class="form-select" required>
-        <option value="start" {% if form.category.value == 'start' %}selected{% endif %}>Start</option>
-        <option value="transfer" {% if form.category.value == 'transfer' %}selected{% endif %}>Transfer</option>
-      </select>
-    </div>
+        <!-- Phone Number -->
+        <div class="mb-3">
+            <label for="phone_number" class="form-label">Phone Number:</label>
+            <input type="tel" id="phone_number" name="phone_number" class="form-control" 
+                   pattern="[0-9]{10}" value="{{ form.phone_number.value }}" 
+                   aria-label="Phone Number" required>
+            <small class="form-text text-muted">Enter a 10-digit phone number.</small>
+        </div>
 
-    <!-- Submit Button -->
-    <button type="submit" class="btn btn-primary">Add Item</button>
-  </form>
-
-  <!-- Checklist Display -->
-  <div class="mt-5">
-    <h1>Checklist</h1>
-    <ul class="list-group">
-      {% for item in items %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          <div>
-            <strong>{{ item.title }}</strong> - {{ item.get_category_display }}
-          </div>
-          <div>
-            <form method="POST" class="d-inline">
-              {% csrf_token %}
-              <input type="hidden" name="item_id" value="{{ item.id }}">
-              <button type="submit" name="action" value="mark_complete" class="btn btn-success btn-sm me-2">Mark as Complete</button>
-              <button type="submit" name="action" value="delete" class="btn btn-danger btn-sm">Delete</button>
-            </form>
-          </div>
-        </li>
-      {% empty %}
-        <p class="text-muted">No items to show.</p>
-      {% endfor %}
-    </ul>
-  </div>
-
-  <!-- Logout Button -->
-  <div class="mt-4">
-    <form method="post" action="{% url 'logout' %}">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-secondary">Logout</button>
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Add Item</button>
     </form>
-  </div>
-</div>
 
+    <!-- Checklist Display -->
+    <div class="mt-5">
+        <h1>Checklist</h1>
+        <ul class="list-group">
+          {% for item in checklist_items %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <div>
+                      <strong>{{ item.title }} </strong> : {{item.phone_number }} 
+                  </div>
+                  <div>
+                      <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" 
+                              data-bs-target="#deleteModal-{{ item.id }}">Delete</button>
+                      <div class="modal fade" id="deleteModal-{{ item.id }}" tabindex="-1" 
+                           aria-labelledby="deleteModalLabel" aria-hidden="true">
+                          <div class="modal-dialog">
+                              <div class="modal-content">
+                                  <div class="modal-header">
+                                      <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                      Are you sure you want to delete "{{ item.title }}"?
+                                  </div>
+                                  <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                      <form method="POST" class="d-inline">
+                                          {% csrf_token %}
+                                          <input type="hidden" name="item_id" value="{{ item.id }}">
+                                          <button type="submit" name="action" value="delete" class="btn btn-danger">Delete</button>
+                                      </form>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </li>
+          {% empty %}
+              <p class="text-muted">No items to show.</p>
+          {% endfor %}
+      </ul>
+      
+    </div>
+
+    <!-- Logout Button -->
+    <div class="mt-4">
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-secondary">Logout</button>
+        </form>
+    </div>
+</div>
 {% endblock %}

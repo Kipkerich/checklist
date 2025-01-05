@@ -4,6 +4,7 @@ from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.timezone import now
 
+
 # Custom user manager to create and manage users
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
@@ -19,6 +20,7 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         return self.create_user(username, email, password, **extra_fields)
+
 
 # CustomUser class (based on AbstractUser)
 class CustomUser(AbstractUser):
@@ -55,21 +57,11 @@ class UserProfile(models.Model):
         return self.user.username
 
 
-# Category model for organizing checklist items
-class Category(models.Model):
-    CATEGORY_CHOICES = [
-        ('start', 'Start'),
-        ('transfer', 'Transfer'),
-    ]
-    name = models.CharField(max_length=100, choices=CATEGORY_CHOICES)
-
-    def __str__(self):
-        return self.get_name_display()  # Returns human-readable name
 
 
-# ChecklistItem model linked to the custom user model
+
 class ChecklistItem(models.Model):
-    title = models.CharField(max_length=200, default="Untitled Item")
+    title = models.CharField(max_length=200, default="Enter Name")
     phone_number = models.CharField(
         max_length=15,
         blank=True,
@@ -82,15 +74,13 @@ class ChecklistItem(models.Model):
         ]
     )
     created_date = models.DateTimeField(auto_now_add=True)
-    completed = models.BooleanField(default=False)  # Track completion
-    category = models.CharField(
-        max_length=100,
-        choices=Category.CATEGORY_CHOICES,
-    )
+    completed = models.BooleanField(default=False)
+
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,  # Use the custom user model
-        on_delete=models.CASCADE   # Specify the behavior on delete
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
     )
+    verified = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

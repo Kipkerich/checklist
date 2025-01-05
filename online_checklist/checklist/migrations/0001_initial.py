@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
                 ('phone_number', models.CharField(blank=True, max_length=15, null=True, validators=[django.core.validators.RegexValidator(message="Phone number must be entered in the format: '+254712345678'. Up to 13 digits allowed.", regex='^\\+?1?\\d{9,13}$')])),
                 ('created_date', models.DateTimeField(auto_now_add=True)),
                 ('completed', models.BooleanField(default=False)),
-                ('category', models.CharField(choices=[('start', 'Start'), ('transfer', 'Transfer')], max_length=100)),
+                
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),

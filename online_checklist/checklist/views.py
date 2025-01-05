@@ -3,12 +3,14 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .models import ChecklistItem
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, ChecklistItemForm
+from django.contrib.admin.views.decorators import staff_member_required
 
 # Homepage view
 def index(request):
     return render(request, 'index.html')
 
-# Registration View
+# Registration View 
+@login_required
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
@@ -79,15 +81,22 @@ def add_item(request):
             checklist_item = form.save(commit=False)
             checklist_item.user = request.user  # Assign the logged-in user
             checklist_item.save()
-            return redirect('checklist')  # Redirect to a success page after saving
+
+            # Debugging: Check if the item is saved
+            print(f"Item saved: {checklist_item.title}")
+            return redirect('checklist')  # Redirect to the checklist page after saving
+        else:
+            print(f"Form errors: {form.errors}")
     else:
         form = ChecklistItemForm()
 
     # Retrieve all checklist items created by the logged-in user
-    checklist_items = ChecklistItem.objects.filter(user=request.user) 
+    checklist_items = ChecklistItem.objects.filter(user=request.user)
 
-    return render(request, 'checklist/checklist.html', {'form': form})
+    return render(request, 'checklist/checklist.html', {'form': form, 'checklist_items': checklist_items})
 
+
+    
 # Mark item as complete
 @login_required
 def complete_item(request, item_id):
@@ -102,3 +111,23 @@ def delete_item(request, item_id):
     item = get_object_or_404(ChecklistItem, id=item_id, user=request.user)
     item.delete()
     return redirect('checklist')
+
+# Verify items
+@login_required
+def verify_checklist(request):
+    if request.method == 'POST':
+        item_id = request.POST.get("item_id")
+        action = request.POST.get("action")
+
+        # Perform actions based on button click (mark complete or delete)
+        item = get_object_or_404(ChecklistItem, id=item_id)
+
+        if action == "mark_complete":
+            item.completed = True
+            item.save()
+        elif action == "delete":
+            item.delete()
+
+    # Fetch all checklist items, regardless of whether they're completed or not
+    items = ChecklistItem.objects.all()
+    return render(request, 'checklist/verify_checklist.html', {'items': items})

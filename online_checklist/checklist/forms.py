@@ -19,4 +19,5 @@ class CustomAuthenticationForm(AuthenticationForm):
 class ChecklistItemForm(forms.ModelForm):
     class Meta:
         model = ChecklistItem
-        fields = ['title', 'phone_number', 'category']
+        fields = ['title', 'phone_number']
+        

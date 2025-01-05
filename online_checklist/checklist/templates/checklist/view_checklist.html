@@ -12,9 +12,9 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
-            <th scope="col">Category</th>
             <th scope="col">Phone Number</th>
             <th scope="col">Start Date</th>
+            <th scope="col">Added By</th> 
           </tr>
         </thead>
         <tbody>
@@ -22,9 +22,10 @@
             <tr>
               <td>{{ forloop.counter }}</td>
               <td>{{ item.title }}</td>
-              <td>{{ item.get_category_display }}</td>
+             
               <td>{{ item.phone_number }}</td>
-              <td>{{ item.created_date|date:"Y-m-d H:i:s" }}</td>
+              <td>{{ item.created_date|date:"Y-m-d " }}</td>
+              <td>{{ item.user.username }}</td>
             </tr>
           {% endfor %}
         </tbody>
